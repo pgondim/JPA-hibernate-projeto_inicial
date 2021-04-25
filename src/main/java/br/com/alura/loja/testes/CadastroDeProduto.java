@@ -3,6 +3,8 @@ package br.com.alura.loja.testes;
 import br.com.alura.loja.dao.CategoriaDao;
 import br.com.alura.loja.dao.ProdutoDao;
 import br.com.alura.loja.modelo.Categoria;
+import br.com.alura.loja.modelo.Cliente;
+import br.com.alura.loja.modelo.Pedido;
 import br.com.alura.loja.modelo.Produto;
 import br.com.alura.loja.util.JPAUtil;
 
@@ -16,6 +18,9 @@ public class CadastroDeProduto {
     public static void main(String[] args) {
         cadastrarProduto();
         Long id = 1l;
+
+        Cliente cliente = new Cliente();
+        Pedido pedido = new Pedido();
 
         EntityManager em = JPAUtil.getEntityManager();
         ProdutoDao produtoDao = new ProdutoDao(em);
