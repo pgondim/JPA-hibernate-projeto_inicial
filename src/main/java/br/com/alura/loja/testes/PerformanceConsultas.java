@@ -10,11 +10,9 @@ import br.com.alura.loja.vo.RelatorioDeVendasVo;
 
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
-public class CadastroDePedido {
-
+public class PerformanceConsultas {
     public static void main(String[] args) {
         EntityManager em = JPAUtil.getEntityManager();
 
@@ -27,6 +25,7 @@ public class CadastroDePedido {
 
         CategoriaDao categoriaDao = new CategoriaDao(em);
         ProdutoDao produtoDao =  new ProdutoDao(em);
+        PedidoDao pedidoDaoComFetch = new PedidoDao(em);
 
         categoria1.setNome("NOTEBOOKS");
         categoria2.setNome("MOUSE");
@@ -88,14 +87,17 @@ public class CadastroDePedido {
 
         relatorio.forEach(System.out::println);
 
+        Pedido pedidoComFetch = pedidoDaoComFetch.buscarPedidoComCliente(1l);
+
 
         em.getTransaction().commit();
         em.close();
+
+        System.out.println(pedidoComFetch.getCliente().getNome());
 
 
 
 
 
     }
-
 }

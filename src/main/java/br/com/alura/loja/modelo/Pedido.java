@@ -15,10 +15,10 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Cliente cliente;
 
-    private BigDecimal valorTotal;
+    private BigDecimal valorTotal = BigDecimal.ZERO;
     private LocalDate data = LocalDate.now();
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)//informa que esse relacionamento já foi mapeado em outro lugar
@@ -50,11 +50,6 @@ public class Pedido {
         return valorTotal;
     }
 
-    public void setvalorTotal(BigDecimal valorTotal) {
-        this.valorTotal = valorTotal;
-
-    }
-
     public LocalDate getData() {
         return data;
     }
@@ -66,7 +61,15 @@ public class Pedido {
     public void adicionarItem(ItemPedido item){
         item.setPedido(this);
         this.itens.add(item);
-        this.valorTotal = item.getPrecoUnitario().multiply(new BigDecimal(item.getQuantidade()));
+        this.valorTotal = this.valorTotal.add(item.getValor());
+    }
+
+    public BigDecimal valorTotalVendido(EntityManager em){
+        String jpql = "SELECT SUM(p.valorTotal) FROM Pedido AS p";
+        this.valorTotal = em.createQuery(jpql, BigDecimal.class)
+                .getSingleResult();
+        return em.createQuery(jpql, BigDecimal.class)
+                .getSingleResult();
     }
 
 }
